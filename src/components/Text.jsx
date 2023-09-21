@@ -1,9 +1,9 @@
 import { Typography } from '@mui/material';
 
-export default function Text({ value, ...rest }) {
+export default function Text({ children, ...rest }) {
   return (
     <Typography {...rest}>
-      {value}
+      {children}
     </Typography>
   )
 }
