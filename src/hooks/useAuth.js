@@ -1,6 +1,7 @@
 import { useUserSystemStore } from './useSystemUserStore';
 
 export function useAuth() {
-	const { id } = useUserSystemStore((state) => state.userSystem);
-	return { isAuth: id !== 0 };
+	const user = useUserSystemStore((state) => state.userSystem);
+	console.log('id', user.id)
+	return { isAuth: user.id !== 0 };
 }
