@@ -3,7 +3,7 @@
 import { useUserSystemStore, useAuth } from "@/hooks";
 
 export default function Home() {
-  const user = useUserSystemStore((state) => state.userSystem);
+  const user = useUserSystemStore((state) => state.userSystem);
   const { isAuth } = useAuth();
   return (
     <main>
