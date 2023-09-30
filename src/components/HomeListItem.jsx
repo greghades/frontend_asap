@@ -3,7 +3,7 @@ import { ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/mater
 import { useRouter } from 'next/navigation';
 import { useUserSystemStore } from '@/hooks';
 
-function HomeListItem({ name, icon, color = '#2E77BB', redirectPath, shouldLogout = false }) {
+function HomeListItem({ name, icon, color = '#2E77BB', redirectPath, onTap }) {
   const logout = useUserSystemStore((state) => state.logout)
   const router = useRouter();
 
@@ -12,9 +12,7 @@ function HomeListItem({ name, icon, color = '#2E77BB', redirectPath, shouldLogou
   };
 
   const handleClick = () => {
-    if (shouldLogout == true) {
-      logout();
-    }
+    onTap();
 
     if (redirectPath) {
       router.push(redirectPath);
