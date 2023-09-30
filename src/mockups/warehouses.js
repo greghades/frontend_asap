@@ -21,8 +21,8 @@ export const warehouses = [
   },
   {
     id: 3,
-    code: 'SUM001',
-    name: 'Suministros 1',
+    code: 'SUM003',
+    name: 'Suministros 2',
     type: 'suministros',
     minQty: 30,
     maxQty: 100,
@@ -31,9 +31,9 @@ export const warehouses = [
   },
   {
     id: 4,
-    code: 'SUM001',
-    name: 'Suministros 1',
-    type: 'suministros',
+    code: 'IN0003',
+    name: 'Ingredientes 2',
+    type: 'ingredientes',
     minQty: 30,
     maxQty: 100,
     currentQty: 10,

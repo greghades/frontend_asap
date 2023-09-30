@@ -77,7 +77,7 @@ const warehouseSchema = yup.object({
 export default function Warehouses() {
   const [openModal, setOpenModal] = useState(false);
   const warehouses = useWarehousesStore((state) => state.warehouses);
-  const createWarehouse = useWarehousesStore((state) => state.create)
+  const createWarehouse = useWarehousesStore((state) => state.create);
 
   const resolver = useSchema(warehouseSchema);
 
