@@ -1,11 +1,18 @@
 export function setItemLocalStorage(key, item) {
 	if (typeof window !== 'undefined') {
-		localStorage.setItem(key, JSON.stringify(item));
+    try {
+		  localStorage.setItem(key, JSON.stringify(item));
+    } catch (error) {}
 	}
 }
 
 export function getItemLocalStorage(key) {
 	if (typeof window !== 'undefined') {
-		return JSON.parse(localStorage.getItem(key));
+    const data = localStorage.getItem(key);
+    if (data) {
+      try {
+        return JSON.parse(data);
+      } catch (error) {}
+    }
 	}
 }
