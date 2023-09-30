@@ -14,6 +14,12 @@ import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import TablePagination from '@mui/material/TablePagination';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import AddIcon from '@mui/icons-material/Add';
+import Button from '@mui/material/Button';
 import { useWarehousesStore } from '@/hooks/useWarehousesStore';
 
 function Row(props) {
@@ -135,24 +141,43 @@ export default function Inventory() {
   const rows = useWarehousesStore((state) => state.warehouses);
 
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>ID</TableCell>
-            <TableCell>Nombre</TableCell>
-            <TableCell>Cantidad mínima</TableCell>
-            <TableCell>Cantidad actual</TableCell>
-            <TableCell>Disponible</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <Row key={row.name} row={row} />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <Box sx={{ '& button': { m: 1, marginBottom: '1em' } }}>
+      {/* <Button variant="contained" size="large">
+        Agregar producto
+      </Button> */}
+      <Button
+        variant="contained"
+        size="large"
+        startIcon={<span>+</span>}
+        sx={{
+          textTransform: 'none',
+          justifyContent: 'flex-start'
+        }}
+        onClick={() => {
+          console.log('Agregar producto');
+        }}
+      >
+        Agregar producto
+      </Button>
+      <TableContainer component={Paper}>
+        <Table aria-label="collapsible table">
+          <TableHead>
+            <TableRow>
+              <TableCell />
+              <TableCell>ID</TableCell>
+              <TableCell>Nombre</TableCell>
+              <TableCell>Cantidad mínima</TableCell>
+              <TableCell>Cantidad actual</TableCell>
+              <TableCell>Disponible</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <Row key={row.name} row={row} />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 }

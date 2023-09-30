@@ -1,11 +1,9 @@
 'use client';
 import * as React from 'react';
 import { useState } from 'react';
-import { Box, AppBar, Toolbar, Drawer, List, ListItem, ListItemText, ListItemButton, ListItemIcon, Divider, Typography, CssBaseline } from '@mui/material';
+import { Box, AppBar, Toolbar, Drawer, List, Divider, Typography, CssBaseline } from '@mui/material';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
-import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
-import AppRegistrationRoundedIcon from '@mui/icons-material/AppRegistrationRounded';
 import Inventory2RoundedIcon from '@mui/icons-material/Inventory2Rounded';
 import RestaurantRoundedIcon from '@mui/icons-material/RestaurantRounded';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
@@ -73,12 +71,6 @@ export default function Home() {
               setShowInventory(true);
             }} />
             <Divider />
-            <HomeListItem name="Iniciar sesión" icon={<LoginRoundedIcon />} redirectPath="/login" />
-            <Divider />
-            <HomeListItem name="Registrarse" icon={<AppRegistrationRoundedIcon />} redirectPath="/" onTap={() => {
-              setShowInventory(false);
-            }} />
-
             <HomeListItem name="Cerrar sesión" icon={<ExitToAppRoundedIcon />} redirectPath="/login" onTap={() => {
               logout();
               router.push('/login');
