@@ -2,7 +2,7 @@ import React from 'react';
 import { ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { useRouter } from 'next/navigation';
 
-function HomeListItem({ name, icon, color = '#2E77BB', redirectPath, onTap }) {
+function HomeListItem({ name, icon, color = '#20528E', redirectPath, onTap }) {
   const router = useRouter();
 
   const iconStyle = {

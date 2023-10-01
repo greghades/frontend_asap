@@ -35,7 +35,7 @@ export default function Home() {
     <Box sx={{ display: 'flex', backgroundColor: '#EEEEEE', minHeight: '100vh' }}>
       <CssBaseline />
       {/* Barra de navegacion */}
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: '#2E77BB' }}>
+      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: '#20528E' }}>
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <RestaurantMenuIcon sx={{ marginRight: '8px' }} />
           <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', textShadow: '1px 1px 4px black' }}>

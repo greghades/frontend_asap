@@ -14,12 +14,8 @@ import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import TablePagination from '@mui/material/TablePagination';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import AddIcon from '@mui/icons-material/Add';
 import Button from '@mui/material/Button';
+import ControlPointRoundedIcon from '@mui/icons-material/ControlPointRounded';
 import { useWarehousesStore } from '@/hooks/useWarehousesStore';
 
 function Row(props) {
@@ -35,6 +31,16 @@ function Row(props) {
           <IconButton
             aria-label="expand row"
             size="small"
+            sx={{
+              ':hover': {
+                bgcolor: '#112B4B',
+                color: 'white',
+              },
+              '&': { 
+                backgroundColor: '#20528E', 
+                color: 'white' 
+              }
+            }}
             onClick={() => setOpen(!open)}
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -135,23 +141,27 @@ Row.propTypes = {
   }).isRequired,
 };
 
-// const rows = warehouses;
-
 export default function Inventory() {
   const rows = useWarehousesStore((state) => state.warehouses);
 
   return (
-    <Box sx={{ '& button': { m: 1, marginBottom: '1em' } }}>
-      {/* <Button variant="contained" size="large">
-        Agregar producto
-      </Button> */}
+    <Box>
       <Button
-        variant="contained"
+        variant="contained" 
         size="large"
-        startIcon={<span>+</span>}
+        startIcon={<ControlPointRoundedIcon />}
         sx={{
           textTransform: 'none',
-          justifyContent: 'flex-start'
+          justifyContent: 'flex-start',
+          ':hover': {
+            bgcolor: '#112B4B', // theme.palette.primary.main
+            color: 'white',
+          },
+          '&': { 
+            marginBottom: '1em', 
+            backgroundColor: '#20528E', 
+            color: 'white' 
+          }
         }}
         onClick={() => {
           console.log('Agregar producto');
