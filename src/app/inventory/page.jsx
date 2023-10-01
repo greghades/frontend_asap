@@ -141,8 +141,12 @@ Row.propTypes = {
   }).isRequired,
 };
 
-export default function Inventory() {
+export default function Inventory({ onAddProduct }) {
   const rows = useWarehousesStore((state) => state.warehouses);
+
+  function addProduct() {
+    onAddProduct();
+  }
 
   return (
     <Box>
@@ -154,8 +158,7 @@ export default function Inventory() {
           textTransform: 'none',
           justifyContent: 'flex-start',
           ':hover': {
-            bgcolor: '#112B4B', // theme.palette.primary.main
-            color: 'white',
+            bgcolor: '#112B4B'
           },
           '&': { 
             marginBottom: '1em', 
@@ -164,7 +167,7 @@ export default function Inventory() {
           }
         }}
         onClick={() => {
-          console.log('Agregar producto');
+          addProduct();
         }}
       >
         Agregar producto

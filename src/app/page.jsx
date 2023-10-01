@@ -11,6 +11,7 @@ import HomeListItem from '@/components/HomeListItem';
 import { useRouter } from 'next/navigation';
 import { useAuth, useUserSystemStore } from '@/hooks';
 import Inventory from './inventory/page';
+import AddProduct from './inventory/addProduct/page';
 
 const drawerWidth = 240;
 
@@ -21,15 +22,25 @@ export default function Home() {
   const username = userSystem.name;
   const { isAuth } = useAuth();
   const [showInventory, setShowInventory] = useState(false);
+  const [showProductForm, setShowProductForm] = useState(false);
 
-  // Define a function to handle the button click and update the content
-  // const handleInventoryDisplay = () => {
-  //   setInventoryContent(<Inventory />);
-  // };
+  // Function to switch to Inventory
+  const switchToInventory = () => {
+    setShowInventory(true);
+    setShowProductForm(false);
+  };
 
-  // if (!isAuth) {
-  //   return router.push('/login');
-  // }
+  // Function to switch to ProductForm
+  const switchToProductForm = () => {
+    switchToDefault();
+    setShowProductForm(true);
+  };
+
+  // Function to return to default content (Typography)
+  const switchToDefault = () => {
+    setShowProductForm(false);
+    setShowInventory(false);
+  };
 
   return (
     <Box sx={{ display: 'flex', backgroundColor: '#EEEEEE', minHeight: '100vh' }}>
@@ -59,16 +70,16 @@ export default function Home() {
         <Box sx={{ overflow: 'auto' }}>
           <List>
             <HomeListItem name="Home" icon={<HomeRoundedIcon />} redirectPath="/" onTap={() => {
-              setShowInventory(false);
+              switchToDefault();
             }} />
             <Divider />
             <HomeListItem name="Platillos del menú" icon={<RestaurantRoundedIcon />} redirectPath="/" onTap={() => {
-              setShowInventory(false);
+              switchToDefault();
             }} />
             <Divider />
             <HomeListItem name="Inventarios" icon={<Inventory2RoundedIcon />} onTap={() => {
               console.log('Inventory', showInventory);
-              setShowInventory(true);
+              switchToInventory();
             }} />
             <Divider />
             <HomeListItem name="Cerrar sesión" icon={<ExitToAppRoundedIcon />} redirectPath="/login" onTap={() => {
@@ -81,10 +92,11 @@ export default function Home() {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
         {showInventory ? (
-          <Inventory />
-        ) : (
-          <>
-            <Typography paragraph>
+        <Inventory onAddProduct={switchToProductForm} />
+      ) : showProductForm ? (
+        <AddProduct onBack={switchToInventory} />
+      ) : (
+        <Typography paragraph>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
               tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
               enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
@@ -98,6 +110,23 @@ export default function Home() {
               consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
               sapien faucibus et molestie ac.
             </Typography>
+      )}
+
+      {/* Conditionally render buttons based on the active component
+      {!showInventory && !showProductForm && (
+        <button onClick={switchToInventory}>Show Inventory</button>
+      )}
+      {showInventory && (
+        <button onClick={switchToProductForm}>Add Product</button>
+      )}
+      {showProductForm && (
+        <button onClick={switchToInventory}>Back to Inventory</button>
+      )} */}
+
+        {/* {showInventory ? (
+          <Inventory />
+        ) : (
+          <>  
             <Typography paragraph>
               Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper
               eget nulla facilisi etiam dignissim diam. Pulvinar elementum integer enim
@@ -112,7 +141,7 @@ export default function Home() {
               posuere sollicitudin aliquam ultrices sagittis orci a.
             </Typography>
           </>
-        )}
+        )} */}
       </Box>
     </Box>
   );
