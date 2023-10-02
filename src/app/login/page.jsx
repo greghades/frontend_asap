@@ -41,12 +41,12 @@ export default function Login() {
 		}
 
 		login(userLogin);
-    router.push('/')
+		router.push('/')
 	}
 
 	if (isAuth) {
-    return router.push('/');
-  }
+		return router.push('/');
+	}
 
 	return (
 		<Container
