@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import { getItemLocalStorage, setItemLocalStorage } from '@/utils';
 
 const baseUser = {
@@ -22,22 +23,26 @@ function userInitialState() {
 	return user;
 }
 
-export const useUserSystemStore = create((set) => ({
-	userSystem: userInitialState(),
-	login: (newUser) =>
-		set(() => {
-			setItemLocalStorage('user', newUser);
-			return { user: { ...newUser } };
+export const useUserSystemStore = create(
+	persist(
+		(set, get) => ({
+			userSystem: userInitialState(),
+			login: (newUser) =>
+				set(() => {
+					return { user: { ...newUser } };
+				}),
+			logout: () =>
+				set(() => {
+					return { user: baseUser };
+				}),
+			editUserSystem: (data) =>
+				set((state) => {
+					const user = { ...state, ...data };
+					return { user };
+				})
 		}),
-	logout: () =>
-		set(() => {
-			setItemLocalStorage('user', baseUser);
-			return { user: baseUser };
-		}),
-	editUserSystem: (data) =>
-		set((state) => {
-			const user = { ...state, ...data };
-			setItemLocalStorage('user', user);
-			return { user };
-		})
-}));
+		{
+			name: 'user'
+		}
+	)
+);
