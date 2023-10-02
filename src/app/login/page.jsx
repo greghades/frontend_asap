@@ -26,13 +26,13 @@ export default function Login() {
 		resolver
 	});
 
-	const login = useUserSystemStore((state) => state.login);
+	const login = useUserSystemStore.getState().login;
 
 	function onSubmit(data) {
 		const userLogin = users.filter(
 			({ password, code }) =>
 				code === data.code && password === data.password
-		)[0];
+		)[0];	
 
 		if (!userLogin) {
 			return alert(

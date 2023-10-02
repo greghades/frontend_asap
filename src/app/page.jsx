@@ -7,6 +7,7 @@ import RestaurantRoundedIcon from '@mui/icons-material/RestaurantRounded';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import { useRouter } from 'next/navigation';
 import { useAuth, useUserSystemStore } from '@/hooks';
+import { useEffect } from 'react';
 import Inventory from './inventory/page';
 import AddProduct from './inventory/addProduct/page';
 
@@ -26,9 +27,9 @@ const HomeListItemGenerator = ({ item, handleItemClick }) => {
 
 export default function Home() {
   const router = useRouter();
-  const userSystem = useUserSystemStore((state) => state.userSystem);
-  const logout = useUserSystemStore((state) => state.logout);
-  const username = userSystem.name;
+  const { isAuth } = useAuth();
+  const userSystem = useUserSystemStore.getState().user;
+  const logout = useUserSystemStore.getState().logout;
   const [showInventory, setShowInventory] = useState(false);
   const [showProductForm, setShowProductForm] = useState(false);
   const sidebarItems = [
@@ -71,6 +72,10 @@ export default function Home() {
     }
   };
 
+	if (!isAuth) {
+		return router.push('/login');
+	}
+
   return (
     <Box sx={{ display: 'flex', backgroundColor: '#EEEEEE', minHeight: '100vh' }}>
       <CssBaseline />
@@ -82,7 +87,7 @@ export default function Home() {
             SISTEMA ASAP
           </Typography>
           <Typography variant="h8" component="div" sx={{ fontWeight: 'light', flex: 1, textAlign: 'center' }}>
-            Bienvenido, {username}.
+            Bienvenido, {userSystem.name}.
           </Typography>
         </Toolbar>
       </AppBar>
