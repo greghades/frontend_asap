@@ -1,5 +1,4 @@
 'use client';
-import * as React from 'react';
 import { useState } from 'react';
 import { Box, AppBar, Toolbar, Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, Typography, CssBaseline } from '@mui/material';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
