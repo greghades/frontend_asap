@@ -1,43 +1,59 @@
 import { create } from 'zustand';
 import { getItemLocalStorage, setItemLocalStorage } from '@/utils';
-import { warehouses } from '@/mockups'
-import { products } from '@/mockups';
+import axios from 'axios';
 
-function warehousesInitialState() {
-	let updatedWarehouses = []
+axios.defaults.baseURL = 'http://34.204.90.28/';
 
-	if (getItemLocalStorage('warehouses')) {
-		updatedWarehouses = getItemLocalStorage('warehouses');
-	} else {
-		updatedWarehouses = warehouses;
-		populateWarehouses(updatedWarehouses);
-		setItemLocalStorage('warehouses', warehouses);
-	}
+function processWarehousesData(warehousesData, productsData) {
+	const updatedWarehouses = warehousesData.map((warehouse) => {
+		const productsInWarehouse = productsData.filter(
+			(product) => product.almacen_id === warehouse.id
+		);
+
+		return {
+			...warehouse,
+			products: productsInWarehouse,
+			currentQty: productsInWarehouse.length,
+			active: productsInWarehouse.length > 0,
+		};
+	});
 
 	return updatedWarehouses;
 }
 
-function populateWarehouses(warehouses) {
-	warehouses.forEach((warehouse) => {
-		const productsInWarehouse = products.filter(
-			(product) => product.warehouseID === warehouse.id
-		);
-
-		warehouse.products = productsInWarehouse;
-		warehouse.currentQty = productsInWarehouse.length;
-		warehouse.active = productsInWarehouse.length > 0;
-	});
-}
-
 export const useWarehousesStore = create((set) => ({
-	warehouses: warehousesInitialState(),
+	warehouses: [],
+	initializeWarehouses: async () => {
+		try {
+			const [warehousesResponse, productsResponse] = await Promise.all([
+				axios.get('logistica/api/almacen/'),
+				axios.get('producion/api/producto/'),
+			]);
+
+			if (warehousesResponse.data && productsResponse.data) {
+				const updatedWarehouses = processWarehousesData(
+					warehousesResponse.data,
+					productsResponse.data
+				);
+				set({ warehouses: updatedWarehouses });
+				setItemLocalStorage('warehouses', updatedWarehouses);
+			}
+		} catch (error) {
+			 const existingWarehouses = getItemLocalStorage('warehouses');
+
+			 if (existingWarehouses) {
+			   set({ warehouses: existingWarehouses });
+			 } else {
+			   set({ warehouses: [] });
+			 }
+		}
+	},
 	create: (newWarehouse) =>
 		set((state) => {
 			const newWarehouseFormat = {
 				...newWarehouse,
-				id: state.warehouses.length,
-				currentQty: 10,
-				active: true
+				currentQty: 0,
+				active: false
 			};
 
 			const warehousess = [...state.warehouses, newWarehouseFormat];
@@ -73,46 +89,3 @@ export const useWarehousesStore = create((set) => ({
 			return { warehouses: warehousesList };
 		})
 }));
-
-// export const useWarehousesStore = create((set) => ({
-// 	warehouses: warehousesInitialState(),
-// create: (newWarehouse) =>
-// 	set((state) => {
-// 		const newWarehouseFormat = {
-// 			...newWarehouse,
-// 			id: state.warehouses.length,
-// 			currentQty: 10,
-// 			active: true
-// 		};
-
-// 		const warehousess = [...state.warehouses, newWarehouseFormat];
-
-// 		setItemLocalStorage('warehouses', warehousess);
-// 		return { warehouses: warehousess };
-// 	}),
-// delete: (codeDelete) =>
-// 	set((state) => {
-// 		const warehousesList = state.filter(
-// 			({ code }) => code !== codeDelete
-// 		)
-// 		setItemLocalStorage('warehouses', warehousesList);
-// 		return { warehouses: warehousesList };
-// 	}),
-// edit: (data, codeWarehouse) =>
-// 	set((state) => {
-// 		let warehouse = state.filter(
-// 			({ code }) => code === codeWarehouse
-// 		)[0];
-
-// 		const warehousesList = state.filter(
-// 			({ code }) => code !== codeWarehouse
-// 		);
-
-// 		warehouse = { ...warehouse, ...data };
-
-// 		warehousesList.push(warehouse);
-
-// 		setItemLocalStorage('warehouses', warehousesList);
-// 		return { warehousesList };
-// 	})
-// }));

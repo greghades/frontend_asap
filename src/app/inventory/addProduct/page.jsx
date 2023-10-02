@@ -31,12 +31,12 @@ const buttonStyle = {
     alignItems: 'center',
     color: '#20528E',
     '&:hover': {
-        backgroundColor: 'transparent', 
+        backgroundColor: 'transparent',
         color: '#112B4B'
     },
-    '& > span': { 
-        fontSize: '1rem', 
-        fontWeight: 'bold' 
+    '& > span': {
+        fontSize: '1rem',
+        fontWeight: 'bold'
     }
 };
 
@@ -54,8 +54,7 @@ export default function AddProduct({ onBack }) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        // Handle form submission here, e.g., send data to the server
-        console.log('Form values:', formValues);
+        console.log('Data:', warehouses, products);
     };
 
     return (
@@ -106,8 +105,8 @@ export default function AddProduct({ onBack }) {
                 <TextField
                     fullWidth
                     name="precio"
-                    label="Precio"
-                    placeholder="Ingresa el precio de venta (Opcional)"
+                    label="Precio (Opcional)"
+                    placeholder="Ingresa el precio de venta"
                     type="number"
                     value={formValues.precio}
                     onChange={handleChange}

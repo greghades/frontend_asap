@@ -17,6 +17,7 @@ import TablePagination from '@mui/material/TablePagination';
 import Button from '@mui/material/Button';
 import ControlPointRoundedIcon from '@mui/icons-material/ControlPointRounded';
 import { useWarehousesStore } from '@/hooks/useWarehousesStore';
+import { useEffect } from 'react';
 
 function Row(props) {
   const { row } = props;
@@ -49,10 +50,10 @@ function Row(props) {
         <TableCell component="th" scope="row">
           {row.id}
         </TableCell>
-        <TableCell>{row.name}</TableCell>
-        <TableCell>{row.minQty}</TableCell>
+        <TableCell>{row.nombre}</TableCell>
+        <TableCell>{row.minimo}</TableCell>
         <TableCell>{row.currentQty}</TableCell>
-        <TableCell>{row.active ? 'Si' : 'No'}</TableCell>
+        <TableCell>{row.activo ? 'Si' : 'No'}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -81,14 +82,14 @@ function Row(props) {
                     .map((productRow) => (
                       <TableRow key={productRow.id}>
                         <TableCell component="th" scope="row">{productRow.id}</TableCell>
-                        <TableCell>{productRow.name}</TableCell>
-                        <TableCell>{productRow.type}</TableCell>
-                        <TableCell>{productRow.currentQty}</TableCell>
-                        <TableCell>{productRow.price}</TableCell>
-                        <TableCell>{productRow.active ? 'Si' : 'No'}</TableCell>
-                        <TableCell>{productRow.expireDate}</TableCell>
-                        <TableCell>{productRow.warehouseID}</TableCell>
-                        <TableCell>{productRow.providerId}</TableCell>
+                        <TableCell>{productRow.nombre}</TableCell>
+                        <TableCell>{productRow.tipo}</TableCell>
+                        <TableCell>{productRow.cantidad}</TableCell>
+                        <TableCell>{productRow.precio}</TableCell>
+                        <TableCell>{productRow.activo ? 'Si' : 'No'}</TableCell>
+                        <TableCell>{productRow.fecha_expiracion}</TableCell>
+                        <TableCell>{productRow.almacen_id}</TableCell>
+                        <TableCell>{productRow.proveedor_id}</TableCell>
                       </TableRow>
                     ))}
                 </TableBody>
@@ -116,33 +117,39 @@ function Row(props) {
 
 Row.propTypes = {
   row: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    minQty: PropTypes.number.isRequired,
-    maxQty: PropTypes.number.isRequired,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired, // id can be a string or number
+    codigo: PropTypes.string, // Assuming this field is present for warehouses
+    nombre: PropTypes.string.isRequired,
+    maximo: PropTypes.number.isRequired,
+    minimo: PropTypes.number.isRequired,
+    activo: PropTypes.bool.isRequired,
     currentQty: PropTypes.number.isRequired,
-    active: PropTypes.bool.isRequired,
     products: PropTypes.arrayOf(
       PropTypes.shape({
-        id: PropTypes.string.isRequired,
+        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired, // id can be a string or number
         name: PropTypes.string.isRequired,
-        uom: PropTypes.string.isRequired,
-        cost: PropTypes.number.isRequired,
-        qty: PropTypes.number.isRequired,
-        active: PropTypes.bool.isRequired,
-        price: PropTypes.number.isRequired,
-        type: PropTypes.string.isRequired,
-        warehouseID: PropTypes.string.isRequired,
-        description: PropTypes.string.isRequired,
-        expireDate: PropTypes.string.isRequired,
-        providerId: PropTypes.string.isRequired,
+        descripcion: PropTypes.string.isRequired,
+        tipo: PropTypes.string.isRequired,
+        cantidad: PropTypes.number.isRequired,
+        costo: PropTypes.number.isRequired,
+        ultimo_cost: PropTypes.number.isRequired,
+        precio: PropTypes.number.isRequired,
+        activo: PropTypes.bool.isRequired,
+        fecha_expiracion: PropTypes.string.isRequired,
+        almacen_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired, // almacen_id can be a string or number
+        unidad_medida_id: PropTypes.string.isRequired,
+        proveedor_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired, // proveedor_id can be a string or number
       })
     ).isRequired,
   }).isRequired,
 };
 
 export default function Inventory({ onAddProduct }) {
-  const rows = useWarehousesStore((state) => state.warehouses);
+  const { warehouses, initializeWarehouses } = useWarehousesStore();
+
+  useEffect(() => {
+    initializeWarehouses();
+  }, [initializeWarehouses]);
 
   function addProduct() {
     onAddProduct();
@@ -185,7 +192,7 @@ export default function Inventory({ onAddProduct }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {warehouses.map((row) => (
               <Row key={row.name} row={row} />
             ))}
           </TableBody>
