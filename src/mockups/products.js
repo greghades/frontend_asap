@@ -239,5 +239,5 @@ export const products = [
     description: 'Ingrediente para ensaladas y hamburguesas',
     expireDate: '16/12/2023',
     providerId: 'P2',
-  },
+  }
 ];
