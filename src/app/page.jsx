@@ -7,7 +7,6 @@ import RestaurantRoundedIcon from '@mui/icons-material/RestaurantRounded';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import { useRouter } from 'next/navigation';
 import { useAuth, useUserSystemStore } from '@/hooks';
-import { useEffect } from 'react';
 import Inventory from './inventory/page';
 import AddProduct from './inventory/addProduct/page';
 
