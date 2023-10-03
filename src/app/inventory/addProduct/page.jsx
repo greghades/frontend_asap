@@ -32,7 +32,7 @@ const initialValues = {
     nombre: '',
     descripcion: '',
     tipo: '',
-    disponible: false,
+    disponible: 0,
     fechaExpiracion: null,
     costo: null,
     precio: null,
@@ -64,8 +64,8 @@ export default function AddProduct({ onBack }) {
             tipo: formValues.tipo,
             cantidad: parseInt(formValues.cantidad),
             costo: parseFloat(formValues.costo),
-            precio: formValues.precio !== null ? parseInt(formValues.precio) : null,
-            activo: bool(formValues.disponible),
+            precio: formValues.precio !== null ? parseInt(formValues.precio) : 0,
+            activo: parseInt(formValues.disponible),
             fecha_expiracion: formValues.fechaExpiracion !== null ? formValues.fechaExpiracion.toISOString() : null,
             almacen_id: parseInt(formValues.almacenId),
             unidad_medida: parseInt(formValues.unidadMedida),
@@ -74,14 +74,16 @@ export default function AddProduct({ onBack }) {
 
         try {
             console.log('Sending data:', data);
+            console.log('test');
             const response = await axios.post('producion/api/producto/', data);
             console.log('Data sent successfully:', response.data);
-
-            // if (response.status === 201) {
-            //     alert('Producto agregado exitosamente');
-            // } else {
-            //     alert('Error al agregar el producto');
-            // }
+            console.log('Status:', response.status);
+            if (response.status === 201) {
+                alert('Producto creado exitosamente');
+                onBack();
+            } else {
+                alert('Ha ocurrido un error al crear el producto. El error es:', response.data);
+            }
 
             setFormValues(initialValues);
         } catch (error) {
@@ -171,9 +173,9 @@ export default function AddProduct({ onBack }) {
                     onChange={handleChange}
                     style={{ margin: '0.5em 0' }}
                 >
-                    <MenuItem value='Ingrediente'>Ingrediente</MenuItem>
-                    <MenuItem value='Insumo'>Insumo</MenuItem>
-                    <MenuItem value='Platillo'>Platillo</MenuItem>
+                    <MenuItem value='ingrediente'>Ingrediente</MenuItem>
+                    <MenuItem value='insumo'>Insumo</MenuItem>
+                    <MenuItem value='platillo'>Platillo</MenuItem>
                 </TextField>
                 <TextField
                     fullWidth
@@ -186,8 +188,7 @@ export default function AddProduct({ onBack }) {
                 >
                     <MenuItem value="1">Kilogramo (kg)</MenuItem>
                     <MenuItem value="2">Litro (lt)</MenuItem>
-                    <MenuItem value="3">Onza (oz)</MenuItem>
-                    <MenuItem value="4">Metro (m)</MenuItem>
+                    <MenuItem value="3">No medible</MenuItem>
                 </TextField>
                 <FormControl component="fieldset">
                     <FormLabel component="legend">Disponible</FormLabel>
@@ -198,8 +199,8 @@ export default function AddProduct({ onBack }) {
                         style={{ margin: '0.5em 0' }}
                         row
                     >
-                        <FormControlLabel value={true} control={<Radio />} label="Sí" />
-                        <FormControlLabel value={false} control={<Radio />} label="No" />
+                        <FormControlLabel value={1} control={<Radio />} label="Sí" />
+                        <FormControlLabel value={0} control={<Radio />} label="No" />
                     </RadioGroup>
                 </FormControl>
                 <DatePicker
