@@ -18,6 +18,8 @@ import Button from '@mui/material/Button';
 import ControlPointRoundedIcon from '@mui/icons-material/ControlPointRounded';
 import { useWarehousesStore } from '@/hooks/useWarehousesStore';
 import { useEffect } from 'react';
+import { Grid, Item } from '@mui/material';
+import FlagCircleIcon from '@mui/icons-material/FlagCircle';
 
 function Row(props) {
   const { row } = props;
@@ -37,9 +39,9 @@ function Row(props) {
                 bgcolor: '#112B4B',
                 color: 'white',
               },
-              '&': { 
-                backgroundColor: '#20528E', 
-                color: 'white' 
+              '&': {
+                backgroundColor: '#20528E',
+                color: 'white'
               }
             }}
             onClick={() => setOpen(!open)}
@@ -50,7 +52,7 @@ function Row(props) {
         <TableCell component="th" scope="row">
           {row.id}
         </TableCell>
-        <TableCell>{row.nombre}</TableCell>
+        <TableCell sx={{ textTransform: 'capitalize' }}>{row.nombre}</TableCell>
         <TableCell>{row.minimo}</TableCell>
         <TableCell>{row.currentQty}</TableCell>
         <TableCell>{row.activo ? 'Si' : 'No'}</TableCell>
@@ -82,8 +84,8 @@ function Row(props) {
                     .map((productRow) => (
                       <TableRow key={productRow.id}>
                         <TableCell component="th" scope="row">{productRow.id}</TableCell>
-                        <TableCell>{productRow.nombre}</TableCell>
-                        <TableCell>{productRow.tipo}</TableCell>
+                        <TableCell sx={{ textTransform: 'capitalize' }}>{productRow.nombre}</TableCell>
+                        <TableCell sx={{ textTransform: 'capitalize' }}>{productRow.tipo}</TableCell>
                         <TableCell>{productRow.cantidad}</TableCell>
                         <TableCell>{productRow.precio}</TableCell>
                         <TableCell>{productRow.activo ? 'Si' : 'No'}</TableCell>
@@ -157,28 +159,52 @@ export default function Inventory({ onAddProduct }) {
 
   return (
     <Box>
-      <Button
-        variant="contained" 
-        size="large"
-        startIcon={<ControlPointRoundedIcon />}
-        sx={{
-          textTransform: 'none',
-          justifyContent: 'flex-start',
-          ':hover': {
-            bgcolor: '#112B4B'
-          },
-          '&': { 
-            marginBottom: '1em', 
-            backgroundColor: '#20528E', 
-            color: 'white' 
-          }
-        }}
-        onClick={() => {
-          addProduct();
-        }}
-      >
-        Agregar producto
-      </Button>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between'}}>
+        <Button
+          variant="contained"
+          size="large"
+          startIcon={<ControlPointRoundedIcon />}
+          sx={{
+            textTransform: 'none',
+            justifyContent: 'flex-start',
+            ':hover': {
+              bgcolor: '#112B4B'
+            },
+            '&': {
+              marginBottom: '1em',
+              backgroundColor: '#20528E',
+              color: 'white'
+            }
+          }}
+          onClick={() => {
+            addProduct();
+          }}
+        >
+          Agregar producto
+        </Button>
+        <Button
+          variant="contained"
+          size="large"
+          startIcon={<FlagCircleIcon />}
+          sx={{
+            textTransform: 'none',
+            justifyContent: 'flex-start',
+            ':hover': {
+              bgcolor: '#112B4B'
+            },
+            '&': {
+              marginBottom: '1em',
+              backgroundColor: '#20528E',
+              color: 'white'
+            }
+          }}
+          onClick={() => {
+            addProduct();
+          }}
+        >
+          Generar reporte
+        </Button>
+      </Box>
       <TableContainer component={Paper}>
         <Table aria-label="collapsible table">
           <TableHead>

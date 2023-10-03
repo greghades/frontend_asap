@@ -1,19 +1,43 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-
-import { Box, Container } from '@mui/material';
+import { Box, Container, AppBar, Toolbar, CssBaseline, ButtonGroup } from '@mui/material';
+import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import * as yup from 'yup';
 import { useForm, Controller } from 'react-hook-form';
-
 import { Input, Text, Button } from '@/components';
 import { useAuth, useSchema, useUserSystemStore } from '@/hooks';
 import { users } from '@/mockups';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const theme = createTheme({
+	palette: {
+		primary: {
+			main: '#DDEFFF',
+			contrastText: '20528E',
+		},
+		secondary: {
+			main: '#20528E',
+			contrastText: '#DDEFFF',
+		},
+	},
+	components: {
+		MuiButton: {
+		  styleOverrides: {
+			root: {
+			  textTransform: 'capitalize',
+			},
+		  },
+		},
+	  },
+});
 
 const loginSchema = yup.object({
 	code: yup.string().required('El codigo del usuario es requerido'),
 	password: yup.string().required('la contraseña es requerida')
 });
+
+const navItems = ['Home', 'About', 'Contact'];
 
 export default function Login() {
 	const { isAuth } = useAuth();
@@ -32,7 +56,7 @@ export default function Login() {
 		const userLogin = users.filter(
 			({ password, code }) =>
 				code === data.code && password === data.password
-		)[0];	
+		)[0];
 
 		if (!userLogin) {
 			return alert(
@@ -60,6 +84,23 @@ export default function Login() {
 				gap: '2em'
 			}}
 		>
+			<CssBaseline />
+			{/* Barra de navegacion */}
+			<AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: '#20528E' }}>
+				<Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+					<RestaurantMenuIcon sx={{ marginRight: '8px' }} />
+					<Text variant="h6" sx={{ fontWeight: 'bold', textShadow: '1px 1px 4px black', flexGrow: 1, display: { xs: 'none', sm: 'block' } }}>
+						SISTEMA ASAP
+					</Text>
+					<Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+						<ThemeProvider theme={theme}>
+							<Button color='primary' variant='text'>¿Quiénes somos?</Button>
+							<Button variant='text'>Contáctanos</Button>
+							<Button variant='text'>Ubicación</Button>
+						</ThemeProvider>
+					</Box>
+				</Toolbar>
+			</AppBar>
 			<Text
 				variant='h1'
 				sx={{
@@ -106,7 +147,9 @@ export default function Login() {
 						/>
 					)}
 				/>
-				<Button type='submit'>Iniciar Sesion</Button>
+				<ThemeProvider theme={theme}>
+					<Button color='secondary' type='submit'>Iniciar Sesion</Button>
+				</ThemeProvider>
 			</Box>
 		</Container>
 	);

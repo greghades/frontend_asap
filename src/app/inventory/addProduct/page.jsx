@@ -11,20 +11,8 @@ import DatePicker from '@mui/lab/DatePicker';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
-
-const initialValues = {
-    nombre: '',
-    descripcion: '',
-    cantidad: '',
-    costo: '',
-    precio: '',
-    almacenId: '',
-    proveedorId: '',
-    tipo: '',
-    unidadMedida: '',
-    disponible: 'si',
-    fechaExpiracion: null,
-};
+import axios from 'axios';
+import { bool } from 'yup';
 
 const buttonStyle = {
     display: 'flex',
@@ -40,6 +28,20 @@ const buttonStyle = {
     }
 };
 
+const initialValues = {
+    nombre: '',
+    descripcion: '',
+    tipo: '',
+    disponible: 0,
+    fechaExpiracion: null,
+    costo: null,
+    precio: null,
+    cantidad: null,
+    almacenId: null,
+    proveedorId: null,
+    unidadMedida: null,
+};
+
 export default function AddProduct({ onBack }) {
     const [formValues, setFormValues] = useState(initialValues);
 
@@ -52,9 +54,41 @@ export default function AddProduct({ onBack }) {
         setFormValues({ ...formValues, fechaExpiracion: date });
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log('Data:', warehouses, products);
+
+        // Prepare the data object based on your parameters
+        const data = {
+            nombre: formValues.nombre,
+            descripcion: formValues.descripcion,
+            tipo: formValues.tipo,
+            cantidad: parseInt(formValues.cantidad),
+            costo: parseFloat(formValues.costo),
+            precio: formValues.precio !== null ? parseInt(formValues.precio) : 0,
+            activo: parseInt(formValues.disponible),
+            fecha_expiracion: formValues.fechaExpiracion !== null ? formValues.fechaExpiracion.toISOString() : null,
+            almacen_id: parseInt(formValues.almacenId),
+            unidad_medida: parseInt(formValues.unidadMedida),
+            proveedor_id: parseInt(formValues.proveedorId),
+        };
+
+        try {
+            console.log('Sending data:', data);
+            console.log('test');
+            const response = await axios.post('producion/api/producto/', data);
+            console.log('Data sent successfully:', response.data);
+            console.log('Status:', response.status);
+            if (response.status === 201) {
+                alert('Producto creado exitosamente');
+                onBack();
+            } else {
+                alert('Ha ocurrido un error al crear el producto. El error es:', response.data);
+            }
+
+            setFormValues(initialValues);
+        } catch (error) {
+            console.error('Error sending data:', error);
+        }
     };
 
     return (
@@ -139,9 +173,9 @@ export default function AddProduct({ onBack }) {
                     onChange={handleChange}
                     style={{ margin: '0.5em 0' }}
                 >
-                    <MenuItem value="tipo1">Tipo 1</MenuItem>
-                    <MenuItem value="tipo2">Tipo 2</MenuItem>
-                    <MenuItem value="tipo3">Tipo 3</MenuItem>
+                    <MenuItem value='ingrediente'>Ingrediente</MenuItem>
+                    <MenuItem value='insumo'>Insumo</MenuItem>
+                    <MenuItem value='platillo'>Platillo</MenuItem>
                 </TextField>
                 <TextField
                     fullWidth
@@ -152,9 +186,9 @@ export default function AddProduct({ onBack }) {
                     onChange={handleChange}
                     style={{ margin: '0.5em 0' }}
                 >
-                    <MenuItem value="unidad1">Unidad 1</MenuItem>
-                    <MenuItem value="unidad2">Unidad 2</MenuItem>
-                    <MenuItem value="unidad3">Unidad 3</MenuItem>
+                    <MenuItem value="1">Kilogramo (kg)</MenuItem>
+                    <MenuItem value="2">Litro (lt)</MenuItem>
+                    <MenuItem value="3">No medible</MenuItem>
                 </TextField>
                 <FormControl component="fieldset">
                     <FormLabel component="legend">Disponible</FormLabel>
@@ -165,8 +199,8 @@ export default function AddProduct({ onBack }) {
                         style={{ margin: '0.5em 0' }}
                         row
                     >
-                        <FormControlLabel value="si" control={<Radio />} label="Sí" />
-                        <FormControlLabel value="no" control={<Radio />} label="No" />
+                        <FormControlLabel value={1} control={<Radio />} label="Sí" />
+                        <FormControlLabel value={0} control={<Radio />} label="No" />
                     </RadioGroup>
                 </FormControl>
                 <DatePicker
